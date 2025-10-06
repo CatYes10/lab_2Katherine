@@ -1,0 +1,45 @@
+<div class="form-wrapper">
+  <div class="background-bubbles"></div>
+
+  <!-- Menú -->
+  <nav class="nav-menu">
+    <a routerLink="/creacionDeOrdenes">Crear Orden</a>
+    <a routerLink="/actualizarOrden">Actualizar Orden</a>
+    <a routerLink="/seguirOrden" class="active">Seguir Orden</a>
+  </nav>
+
+  <div class="form-container">
+    <h2>Seguir Orden</h2>
+    <p class="subtitle">Ingresa el número de rastreo para ver el historial completo del paquete</p>
+
+    <form [formGroup]="trackingForm" (ngSubmit)="buscarPaquete()">
+      <div class="input-group d-flex align-items-center gap-2">
+        <div class="flex-grow-1">
+          <label>Número de Rastreo *</label>
+          <input type="text" formControlName="trackingId" placeholder="Ej: 12345ABC">
+        </div>
+        <button type="submit">🔍 Buscar</button>
+      </div>
+    </form>
+
+    <div *ngIf="packageInfo" class="mt-3">
+      <h3>Detalles del Paquete</h3>
+      <p><strong>Cliente:</strong> {{ packageInfo.name }}</p>
+      <p><strong>Dirección:</strong> {{ packageInfo.deliveryAddress }}</p>
+      <p><strong>Descripción:</strong> {{ packageInfo.description }}</p>
+
+      <h4 class="mt-3">Historial de Cambios</h4>
+      <div *ngIf="historial.length > 0; else noHistorial">
+        <div *ngFor="let cambio of historial" class="input-group historial">
+          <p><strong>Estado:</strong> {{ cambio.estado }}</p>
+          <p><strong>Responsable:</strong> {{ cambio.responsable }}</p>
+          <p><strong>Comentario:</strong> {{ cambio.comentario }}</p>
+          <p><strong>Fecha:</strong> {{ cambio.fecha | date:'short' }}</p>
+        </div>
+      </div>
+      <ng-template #noHistorial>
+        <p>No hay historial de cambios para este paquete.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
