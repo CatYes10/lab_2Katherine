@@ -1,0 +1,78 @@
+<div class="form-wrapper">
+  <div class="background-bubbles"></div>
+
+  <!-- Menú de navegación -->
+  <nav class="nav-menu">
+    <a routerLink="/creacionDeOrdenes" class="active">Creación de Orden</a>
+    <a routerLink="/actualizarOrden">Actualizar Orden</a>
+    <a routerLink="/seguirOrden">Seguir Orden</a>
+  </nav>
+
+  <div class="form-container">
+    <h2>📝 Creación de Nueva Orden</h2>
+    <p class="subtitle">Registra los datos del cliente y del paquete</p>
+
+    <form [formGroup]="creationForm" (ngSubmit)="submitOrder()">
+      <!-- Nombre -->
+      <div class="input-group">
+        <label>Nombre Completo *</label>
+        <input type="text" formControlName="name" placeholder="Ej: Ana María García">
+        <small class="error-message" *ngIf="formSubmitted && creationForm.get('name')?.invalid">
+          <span *ngIf="creationForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
+          <span *ngIf="creationForm.get('name')?.errors?.['pattern']">Solo letras y espacios.</span>
+          <span *ngIf="creationForm.get('name')?.errors?.['minlength'] || creationForm.get('name')?.errors?.['maxlength']">
+            Debe tener entre 3 y 50 caracteres.
+          </span>
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <label>Email *</label>
+        <input type="email" formControlName="email" placeholder="ejemplo@gmail.com">
+        <small class="error-message" *ngIf="formSubmitted && creationForm.get('email')?.invalid">
+          <span *ngIf="creationForm.get('email')?.errors?.['required']">El email es obligatorio.</span>
+          <span *ngIf="creationForm.get('email')?.errors?.['email']">Formato incorrecto.</span>
+          <span *ngIf="creationForm.get('email')?.errors?.['restrictedDomain']">Solo Gmail/Outlook.</span>
+        </small>
+      </div>
+
+      <!-- Dirección -->
+      <div class="input-group">
+        <label>Dirección de Entrega *</label>
+        <input type="text" formControlName="deliveryAddress" placeholder="Ej: 15 Calle 5-20, Ciudad">
+        <small class="error-message" *ngIf="formSubmitted && creationForm.get('deliveryAddress')?.invalid">
+          <span *ngIf="creationForm.get('deliveryAddress')?.errors?.['required']">La dirección es obligatoria.</span>
+          <span *ngIf="creationForm.get('deliveryAddress')?.errors?.['minlength'] || creationForm.get('deliveryAddress')?.errors?.['maxlength']">
+            Entre 10 y 100 caracteres.
+          </span>
+        </small>
+      </div>
+
+      <!-- Descripción -->
+      <div class="input-group">
+        <label>Descripción del Paquete *</label>
+        <textarea formControlName="description" placeholder="Describa brevemente el contenido del paquete."></textarea>
+        <small class="error-message" *ngIf="formSubmitted && creationForm.get('description')?.invalid">
+          <span *ngIf="creationForm.get('description')?.errors?.['required']">La descripción es obligatoria.</span>
+          <span *ngIf="creationForm.get('description')?.errors?.['minlength']">
+            Al menos 40 caracteres.
+          </span>
+          <span *ngIf="creationForm.get('description')?.errors?.['maxlength']">
+            Máximo 120 caracteres.
+          </span>
+        </small>
+      </div>
+
+      <button type="submit">Crear Orden y Generar Rastreo ✨</button>
+    </form>
+
+    <!-- Mensaje de éxito -->
+    <div class="success-message" *ngIf="newPackage">
+      <p>✅ Orden Creada Exitosamente</p>
+      <p><strong>Número de Paquete:</strong> {{ newPackage.packageNumber }}</p>
+      <p><strong>ID de Rastreo:</strong> {{ newPackage.id }}</p>
+      <button (click)="goToTracking()">Seguir esta orden 🚀</button>
+    </div>
+  </div>
+</div>
