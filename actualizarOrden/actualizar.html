@@ -1,0 +1,64 @@
+<div class="form-wrapper">
+  <div class="background-bubbles"></div>
+
+  <!--  Menú -->
+  <nav class="nav-menu">
+    <a routerLink="/creacionDeOrdenes">Creación de Orden</a>
+    <a routerLink="/actualizarOrden" class="active">Actualizar Orden</a>
+    <a routerLink="/seguirOrden">Seguir Orden</a>
+  </nav>
+
+  <div class="form-container">
+    <h2>Actualizar Orden</h2>
+    <p class="subtitle">Busca una orden existente para modificar su estado</p>
+
+    <form [formGroup]="updateForm" (ngSubmit)="submitUpdate()">
+
+      <!--Número de orden  -->
+      <div class="input-group d-flex align-items-center gap-2">
+        <div class="flex-grow-1">
+          <label>Número de Orden *</label>
+          <input type="text" formControlName="packageNumber" placeholder="Ej: 12345">
+        </div>
+        <button type="button" (click)="buscarOrden()" class="btn-buscar">
+          <i class="bi bi-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="error-message" *ngIf="formSubmitted && updateForm.get('packageNumber')?.invalid">
+        Debes ingresar un número de orden válido.
+      </div>
+
+      <!-- Mostrar datos de la orden solo si se encontró -->
+      <div *ngIf="packageToUpdate" class="mt-3">
+        <p><strong>Cliente:</strong> {{ packageToUpdate.name }}</p>
+        <p><strong>Dirección:</strong> {{ packageToUpdate.deliveryAddress }}</p>
+        <p><strong>Descripción:</strong> {{ packageToUpdate.description }}</p>
+      </div>
+
+      <!-- Estado -->
+      <div class="input-group">
+        <label>Estado *</label>
+        <select formControlName="estado">
+          <option value="">Seleccione un estado</option>
+          <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+        </select>
+      </div>
+
+      <!-- Comentario -->
+      <div class="input-group">
+        <label>Comentario *</label>
+        <textarea formControlName="comentario" placeholder="Detalles sobre la actualización"></textarea>
+      </div>
+
+      <!-- Responsable -->
+      <div class="input-group">
+        <label>Responsable *</label>
+        <input type="text" formControlName="responsable" placeholder="Ej: Katherine Archila">
+      </div>
+
+      <button type="submit">Actualizar Orden</button>
+
+    </form>
+  </div>
+</div>
